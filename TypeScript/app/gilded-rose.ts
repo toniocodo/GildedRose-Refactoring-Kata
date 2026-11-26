@@ -10,8 +10,14 @@ export class Item {
   }
 }
 
+const MIN_QUALITY = 0;
+const MAX_QUALITY = 50;
+const CONJURED_FACTOR = 2;
+
+// Any item with "Sulfuras" in its name is considered Legendary grade
 export const isLegendary = (item: Item) =>
   item?.name !== null && item?.name !== undefined && /Sulfuras/.test(item.name);
+// Any item with name starting with "Backstage passes" is backstage pass
 export const isBackstagePasses = (item: Item) =>
   item?.name !== null &&
   item?.name !== undefined &&
@@ -31,49 +37,37 @@ export class GildedRose {
 
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-        if (this.items[i].quality > 0) {
-          if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-            this.items[i].quality = this.items[i].quality - 1
-          }
-        }
-      } else {
-        if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1
-          if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].sellIn < 11) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1
-              }
-            }
-            if (this.items[i].sellIn < 6) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1
-              }
-            }
-          }
-        }
-      }
-      if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
-      }
-      if (this.items[i].sellIn < 0) {
-        if (this.items[i].name != 'Aged Brie') {
-          if (this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].quality > 0) {
-              if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                this.items[i].quality = this.items[i].quality - 1
-              }
-            }
-          } else {
-            this.items[i].quality = this.items[i].quality - this.items[i].quality
-          }
+      const item = this.items[i];
+
+      if (!item || isLegendary(item)) continue;
+
+      const { sellIn, quality } = item;
+      const isExpired = sellIn <= 0;
+
+      if (isBackstagePasses(item)) {
+        if (isExpired) {
+          item.quality = 0;
         } else {
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1
+          let gain = 1;
+          if (sellIn <= 5) {
+            gain = 3;
+          } else if (sellIn <= 10) {
+            gain = 2;
           }
+          item.quality = Math.min(MAX_QUALITY, quality + gain);
         }
+      } else if (isAgedBrie(item)) {
+        const gain = isExpired ? 2 : 1;
+        item.quality = Math.min(MAX_QUALITY, quality + gain);
+      } else {
+        const regularLoss = isExpired ? 2 : 1;
+        const loss = isConjured(item)
+          ? regularLoss * CONJURED_FACTOR
+          : regularLoss;
+        item.quality = Math.max(MIN_QUALITY, item.quality - loss);
       }
+
+      item.sellIn = sellIn - 1;
     }
 
     return this.items;
