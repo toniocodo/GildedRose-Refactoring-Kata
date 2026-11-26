@@ -1,11 +1,22 @@
-import { Item, GildedRose } from "@/gilded-rose";
+import {
+  Item,
+  GildedRose,
+  isAgedBrie,
+  isBackstagePasses,
+  isLegendary,
+  isConjured,
+} from "@/gilded-rose";
 
 const makeMixedItems = () => [
-  new Item("Sulfuras", 5, 80),
-  new Item("Backstage passes", 11, 0),
-  new Item("Aged Brie", 10, 0),
-  new Item("regular", 10, 10),
-  new Item("Conjured", 10, 10),
+  new Item("+5 Dexterity Vest", 10, 20),
+  new Item("Aged Brie", 2, 0),
+  new Item("Elixir of the Mongoose", 5, 7),
+  new Item("Sulfuras, Hand of Ragnaros", 0, 80),
+  new Item("Sulfuras, Hand of Ragnaros", -1, 80),
+  new Item("Backstage passes to a TAFKAL80ETC concert", 15, 20),
+  new Item("Backstage passes to a TAFKAL80ETC concert", 10, 49),
+  new Item("Backstage passes to a TAFKAL80ETC concert", 5, 49),
+  new Item("Conjured Mana Cake", 3, 6),
 ];
 
 describe("Gilded Rose", () => {
@@ -66,21 +77,25 @@ describe("Gilded Rose", () => {
 
   describe("when items are mixed", () => {
     it("preserves item name after an update", () => {
-      const mixedItems = makeMixedItems()
+      const mixedItems = makeMixedItems();
       const gildedRose = new GildedRose(mixedItems);
       const items = gildedRose.updateQuality();
 
       expect(items.map(({ name }) => ({ name }))).toEqual([
-        { name: "Sulfuras" },
-        { name: "Backstage passes" },
+        { name: "+5 Dexterity Vest" },
         { name: "Aged Brie" },
-        { name: "regular" },
-        { name: "Conjured" },
+        { name: "Elixir of the Mongoose" },
+        { name: "Sulfuras, Hand of Ragnaros" },
+        { name: "Sulfuras, Hand of Ragnaros" },
+        { name: "Backstage passes to a TAFKAL80ETC concert" },
+        { name: "Backstage passes to a TAFKAL80ETC concert" },
+        { name: "Backstage passes to a TAFKAL80ETC concert" },
+        { name: "Conjured Mana Cake" },
       ]);
     });
 
     it("returns the items when updateQuality is called", () => {
-      const mixedItems = makeMixedItems()
+      const mixedItems = makeMixedItems();
       const gildedRose = new GildedRose(mixedItems);
       const items = gildedRose.updateQuality();
       expect(items).toBe(mixedItems);
