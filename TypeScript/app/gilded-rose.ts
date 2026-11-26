@@ -10,6 +10,18 @@ export class Item {
   }
 }
 
+export const isLegendary = (item: Item) =>
+  item?.name !== null && item?.name !== undefined && /Sulfuras/.test(item.name);
+export const isBackstagePasses = (item: Item) =>
+  item?.name !== null &&
+  item?.name !== undefined &&
+  /^Backstage passes/.test(item.name);
+export const isAgedBrie = (item: Item) => item?.name === "Aged Brie";
+export const isConjured = (item: Item) =>
+  item?.name !== null &&
+  item?.name !== undefined &&
+  (item.name === "Conjured" || item.name.startsWith("Conjured "));
+
 export class GildedRose {
   items: Array<Item>;
 
