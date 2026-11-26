@@ -191,8 +191,20 @@ describe("Gilded Rose", () => {
   });
 
   describe("when items are legendary", () => {
-    it.todo("ensures sellIn is preserved");
-    it.todo("preserves quality at 80");
+    it("ensures sellIn is preserved", () => {
+      const legendaryItem = new Item("Sulfuras", 5, 80);
+      const gildedRose = new GildedRose([legendaryItem]);
+      const items = gildedRose.updateQuality();
+
+      expect(items[0].sellIn).toBe(5);
+    });
+    it("preserves quality at 80", () => {
+      const legendaryItem = new Item("Sulfuras", 0, 80);
+      const gildedRose = new GildedRose([legendaryItem]);
+      const items = gildedRose.updateQuality();
+
+      expect(items[0].quality).toBe(80);
+    });
   });
 
   describe("isConjured", () => {
