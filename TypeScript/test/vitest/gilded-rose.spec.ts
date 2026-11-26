@@ -21,10 +21,44 @@ const makeMixedItems = () => [
 
 describe("Gilded Rose", () => {
   describe("when items are regular", () => {
-    it.todo("lowers sellIn by 1");
-    it.todo("lowers quality by 1 when sellIn is above 0");
-    it.todo("lowers quality by 2 when sellIn starts at 0 or below");
-    it.todo("prevents quality to be lower than 0");
+    it("lowers sellIn by 1", () => {
+      const regularItem = new Item("regular", 3, 10);
+      const gildedRose = new GildedRose([regularItem]);
+
+      for (let i = 0; i < 5; i++) {
+        const items = gildedRose.updateQuality();
+        expect(items[0].sellIn).toBe(3 - (i + 1));
+      }
+    });
+    it("lowers quality by 1 when sellIn is above 0", () => {
+      const regularItem = new Item("regular", 10, 10);
+      const gildedRose = new GildedRose([regularItem]);
+
+      for (let i = 0; i < 5; i++) {
+        const items = gildedRose.updateQuality();
+        expect(items[0].quality).toBe(10 - (i + 1));
+      }
+    });
+    it("lowers quality by 2 when sellIn starts at 0 or below", () => {
+      const regularItem = new Item("regular", 1, 10);
+      const gildedRose = new GildedRose([regularItem]);
+      let items = gildedRose.updateQuality();
+
+      expect(items[0].quality).toBe(9);
+
+      items = gildedRose.updateQuality();
+
+      expect(items[0].quality).toBe(7);
+    });
+    it("prevents quality to be lower than 0", () => {
+      const regularItem = new Item("regular", 0, 1);
+      const gildedRose = new GildedRose([regularItem]);
+
+      for (let i = 0; i < 3; i++) {
+        const items = gildedRose.updateQuality();
+        expect(items[0].quality).toBe(0);
+      }
+    });
   });
 
   describe("isAgedBrie", () => {
