@@ -1,6 +1,6 @@
 import { Item, GildedRose } from "@/gilded-rose";
 
-const mixedItems = [
+const makeMixedItems = () => [
   new Item("Sulfuras", 5, 80),
   new Item("Backstage passes", 11, 0),
   new Item("Aged Brie", 10, 0),
@@ -66,6 +66,7 @@ describe("Gilded Rose", () => {
 
   describe("when items are mixed", () => {
     it("preserves item name after an update", () => {
+      const mixedItems = makeMixedItems()
       const gildedRose = new GildedRose(mixedItems);
       const items = gildedRose.updateQuality();
 
@@ -79,6 +80,7 @@ describe("Gilded Rose", () => {
     });
 
     it("returns the items when updateQuality is called", () => {
+      const mixedItems = makeMixedItems()
       const gildedRose = new GildedRose(mixedItems);
       const items = gildedRose.updateQuality();
       expect(items).toBe(mixedItems);
