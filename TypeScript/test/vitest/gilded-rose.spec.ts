@@ -123,12 +123,58 @@ describe("Gilded Rose", () => {
   });
 
   describe("when items are Backstage passes", () => {
-    it.todo("lowers sellIn by 1");
-    it.todo("increases quality by 1 when sellIn > 10");
-    it.todo("increases quality by 2 when sellIn is > 5 and <= 10 ");
-    it.todo("increases quality by 3 when sellIn is > 0 and <= 5");
-    it.todo("sets quality to 0 when sellIn starts at 0 or below");
-    it.todo("prevents quality to exceeds 50");
+    it("lowers sellIn by 1", () => {
+      const backstagePassesItem = new Item("Backstage passes", 3, 10);
+      const gildedRose = new GildedRose([backstagePassesItem]);
+
+      for (let i = 0; i < 5; i++) {
+        const items = gildedRose.updateQuality();
+        expect(items[0].sellIn).toBe(3 - (i + 1));
+      }
+    });
+    it("increases quality by 1 when sellIn > 10", () => {
+      const backstagePassesItem = new Item("Backstage passes", 11, 0);
+      const gildedRose = new GildedRose([backstagePassesItem]);
+      const items = gildedRose.updateQuality();
+
+      expect(items[0].quality).toBe(1);
+    });
+    it("increases quality by 2 when sellIn is > 5 and <= 10 ", () => {
+      const backstagePassesItem = new Item("Backstage passes", 10, 0);
+      const gildedRose = new GildedRose([backstagePassesItem]);
+
+      for (let i = 0; i < 5; i++) {
+        const items = gildedRose.updateQuality();
+        expect(items[0].quality).toBe(2 * (i + 1));
+      }
+    });
+    it("increases quality by 3 when sellIn is > 0 and <= 5", () => {
+      const backstagePassesItem = new Item("Backstage passes", 5, 0);
+      const gildedRose = new GildedRose([backstagePassesItem]);
+
+      for (let i = 0; i < 5; i++) {
+        const items = gildedRose.updateQuality();
+        expect(items[0].quality).toBe(3 * (i + 1));
+      }
+    });
+    it("sets quality to 0 when sellIn starts at 0 or below", () => {
+      const backstagePassesItem = new Item("Backstage passes", 0, 10);
+      const gildedRose = new GildedRose([backstagePassesItem]);
+      const items = gildedRose.updateQuality();
+
+      expect(items[0].quality).toBe(0);
+    });
+    it("prevents quality to exceeds 50", () => {
+      const backstagePassesItem = new Item("Backstage passes", 1, 49);
+      const gildedRose = new GildedRose([backstagePassesItem]);
+      let items = gildedRose.updateQuality();
+
+      expect(items[0].quality).toBe(50);
+
+      items = gildedRose.updateQuality();
+
+      expect(items[0].quality).toBe(0);
+    });
   });
 
   describe("isLegendary", () => {
