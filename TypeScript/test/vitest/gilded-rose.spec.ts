@@ -73,10 +73,40 @@ describe("Gilded Rose", () => {
   });
 
   describe("when items are Aged Brie", () => {
-    it.todo("lowers sellIn by 1");
-    it.todo("increases quality by 1 when sellIn is above 0");
-    it.todo("increases quality by 2 when sellIn starts at 0 or below");
-    it.todo("prevents quality to exceeds 50");
+    it("lowers sellIn by 1", () => {
+      const agedBrieItem = new Item("Aged Brie", 3, 10);
+      const gildedRose = new GildedRose([agedBrieItem]);
+
+      for (let i = 0; i < 5; i++) {
+        const items = gildedRose.updateQuality();
+        expect(items[0].sellIn).toBe(3 - (i + 1));
+      }
+    });
+    it("increases quality by 1 when sellIn is above 0", () => {
+      const agedBrieItem = new Item("Aged Brie", 10, 10);
+      const gildedRose = new GildedRose([agedBrieItem]);
+
+      for (let i = 0; i < 5; i++) {
+        const items = gildedRose.updateQuality();
+        expect(items[0].quality).toBe(10 + (i + 1));
+      }
+    });
+    it("increases quality by 2 when sellIn starts at 0 or below", () => {
+      const agedBrieItem = new Item("Aged Brie", 0, 10);
+      const gildedRose = new GildedRose([agedBrieItem]);
+      const items = gildedRose.updateQuality();
+
+      expect(items[0].quality).toBe(12);
+    });
+    it("prevents quality to exceeds 50", () => {
+      const agedBrieItem = new Item("Aged Brie", 0, 49);
+      const gildedRose = new GildedRose([agedBrieItem]);
+
+      for (let i = 0; i < 3; i++) {
+        const items = gildedRose.updateQuality();
+        expect(items[0].quality).toBe(50);
+      }
+    });
   });
 
   describe("isBackstagePasses", () => {
