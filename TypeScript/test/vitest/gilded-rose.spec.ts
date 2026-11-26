@@ -209,7 +209,9 @@ describe("Gilded Rose", () => {
 
   describe("isConjured", () => {
     it('returns true for an item named or starting with "Conjured"', () => {
-      const item = new Item("Conjured Mana Cake", 10, 10);
+      let item = new Item("Conjured Mana Cake", 10, 10);
+      expect(isConjured(item)).toBe(true);
+      item = new Item("Conjured", 10, 10);
       expect(isConjured(item)).toBe(true);
     });
     it('returns false for an item not starting with "Conjured"', () => {
