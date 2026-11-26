@@ -289,8 +289,41 @@ describe("Gilded Rose", () => {
       expect(items).toBe(mixedItems);
     });
 
-    it.todo(
-      "leaves legendary item unchanged and updates the items that follow it",
-    );
+    it("leaves legendary item unchanged and updates the other items", () => {
+      const gildedRose = new GildedRose([
+        new Item("Sulfuras", 5, 80),
+        new Item("Backstage passes", 11, 0),
+        new Item("Aged Brie", 10, 0),
+        new Item("regular", 10, 10),
+        new Item("Conjured", 10, 10),
+      ]);
+      const items = gildedRose.updateQuality();
+
+      expect(items.map(({ sellIn, quality }) => ({ sellIn, quality }))).toEqual([
+        { sellIn: 5, quality: 80 },
+        { sellIn: 10, quality: 1 },
+        { sellIn: 9, quality: 1 },
+        { sellIn: 9, quality: 9 },
+        { sellIn: 9, quality: 8 },
+      ]);
+    });
+
+    it("updates all the items correctly", () => {
+      const mixedItems = makeMixedItems();
+      const gildedRose = new GildedRose(mixedItems);
+      const items = gildedRose.updateQuality();
+
+      expect(items.map(({ sellIn, quality }) => ({ sellIn, quality }))).toEqual([
+        { sellIn: 9, quality: 19 },
+        { sellIn: 1, quality: 1 },
+        { sellIn: 4, quality: 6 },
+        { sellIn: 0, quality: 80 },
+        { sellIn: -1, quality: 80 },
+        { sellIn: 14, quality: 21 },
+        { sellIn: 9, quality: 50 },
+        { sellIn: 4, quality: 50 },
+        { sellIn: 2, quality: 4 },
+      ]);
+    });
   });
 });
