@@ -28,8 +28,14 @@ describe("Gilded Rose", () => {
   });
 
   describe("isAgedBrie", () => {
-    it.todo('returns true for an item named "Aged Brie"');
-    it.todo("returns false for an item with a different name");
+    it('returns true for an item named "Aged Brie"', () => {
+      const item = new Item("Aged Brie", 10, 10);
+      expect(isAgedBrie(item)).toBe(true);
+    });
+    it("returns false for an item with a different name", () => {
+      const item = new Item("Aged Brie cheese", 10, 10);
+      expect(isAgedBrie(item)).toBe(false);
+    });
   });
 
   describe("when items are Aged Brie", () => {
@@ -40,8 +46,16 @@ describe("Gilded Rose", () => {
   });
 
   describe("isBackstagePasses", () => {
-    it.todo('returns true for an item starting with "Backstage passes"');
-    it.todo("returns false for an item starting with a different name");
+    it('returns true for an item starting with "Backstage passes"', () => {
+      let item = new Item("Backstage passes", 10, 10);
+      expect(isBackstagePasses(item)).toBe(true);
+      item = new Item("Backstage passes to a TAFKAL80ETC concert", 10, 10);
+      expect(isBackstagePasses(item)).toBe(true);
+    });
+    it("returns false for an item starting with a different name", () => {
+      const item = new Item("Not a Backstage passes", 10, 10);
+      expect(isBackstagePasses(item)).toBe(false);
+    });
   });
 
   describe("when items are Backstage passes", () => {
@@ -54,8 +68,16 @@ describe("Gilded Rose", () => {
   });
 
   describe("isLegendary", () => {
-    it.todo('returns true for an item containing "Sulfuras"');
-    it.todo('returns false for an item not containing "Sulfuras"');
+    it('returns true for an item containing "Sulfuras"', () => {
+      let item = new Item("Sulfuras, Hand of Ragnaros", 0, 80);
+      expect(isLegendary(item)).toBe(true);
+      item = new Item("Hand of Ragnaros, Sulfuras", 0, 80);
+      expect(isLegendary(item)).toBe(true);
+    });
+    it('returns false for an item not containing "Sulfuras"', () => {
+      const item = new Item("regular", 0, 80);
+      expect(isLegendary(item)).toBe(false);
+    });
   });
 
   describe("when items are legendary", () => {
@@ -64,8 +86,16 @@ describe("Gilded Rose", () => {
   });
 
   describe("isConjured", () => {
-    it.todo('returns true for an item named or starting with "Conjured"');
-    it.todo('returns false for an item not starting with "Conjured"');
+    it('returns true for an item named or starting with "Conjured"', () => {
+      const item = new Item("Conjured Mana Cake", 10, 10);
+      expect(isConjured(item)).toBe(true);
+    });
+    it('returns false for an item not starting with "Conjured"', () => {
+      let item = new Item("Not Conjured Mana Cake", 10, 10);
+      expect(isConjured(item)).toBe(false);
+      item = new Item("Conjuredness", 10, 10);
+      expect(isConjured(item)).toBe(false);
+    });
   });
 
   describe("when items are Conjured", () => {
